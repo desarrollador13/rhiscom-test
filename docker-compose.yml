@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  rhiscom_db:
+    image: postgres:15-alpine
+    container_name: rhiscom_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-rhiscom}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rhiscom}
+      POSTGRES_DB: rhiscom_db
+      TZ: "America/Bogota"
+    ports:
+      - "5432:5432"
+    volumes:
+      - rhiscom_db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rhiscom -d rhiscom_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  rhiscom_db:
