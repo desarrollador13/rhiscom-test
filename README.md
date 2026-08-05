@@ -19,7 +19,7 @@ Una vez que los contenedores estén en ejecución, podrás acceder a la aplicaci
 
 | Servicio | Acceso / URL | Puerto Local |
 | :-------- | :----------- | :----------: |
-| **Frontend** | http://localhost | `80` |
+| **Frontend** | http://localhost | `3000` |
 | **Backend (API REST)** | http://localhost:8080/api/products | `8080` |
 | **Base de Datos (PostgreSQL)** | `localhost` | `5432` |
 
