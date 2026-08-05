@@ -2,6 +2,7 @@ package com.rhiscom_ms.controllers;
 
 import com.rhiscom_ms.dtos.request.ProductRequestDTO;
 import com.rhiscom_ms.dtos.request.ProductUpdateDTO;
+import com.rhiscom_ms.dtos.responses.PageResponseDTO;
 import com.rhiscom_ms.dtos.responses.ProductResponseDTO;
 import com.rhiscom_ms.services.IProductService;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(
+    public ResponseEntity<PageResponseDTO> getAllProducts(
         @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size
     ) {
        return ResponseEntity.ok().body(productService.getAllProducts(page, size));
@@ -33,7 +34,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.saveProduct(dto));
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> deleteProduct(@PathVariable Integer id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
