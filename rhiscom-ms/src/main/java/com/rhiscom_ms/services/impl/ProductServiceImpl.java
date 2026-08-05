@@ -2,18 +2,17 @@ package com.rhiscom_ms.services.impl;
 
 import com.rhiscom_ms.dtos.request.ProductRequestDTO;
 import com.rhiscom_ms.dtos.request.ProductUpdateDTO;
+import com.rhiscom_ms.dtos.responses.PageResponseDTO;
 import com.rhiscom_ms.dtos.responses.ProductResponseDTO;
 import com.rhiscom_ms.entities.Product;
 import com.rhiscom_ms.exceptions.ResourceNotFoundException;
 import com.rhiscom_ms.mappers.ProductMapper;
 import com.rhiscom_ms.repositories.ProductRepository;
 import com.rhiscom_ms.services.IProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements IProductService {
@@ -25,13 +24,12 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public List<ProductResponseDTO> getAllProducts(int page, int size) {
+    public PageResponseDTO getAllProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        return productRepository.findAll(pageable)
-            .stream()
-            .map(ProductMapper::toDTO)
-            .collect(Collectors.toList());
+        Page<Product> pageResult = productRepository.findAll(pageable);
+
+        return ProductMapper.toPageResponseDTO(pageResult);
     }
 
     @Override

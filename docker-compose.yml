@@ -20,5 +20,35 @@ services:
       timeout: 5s
       retries: 5
 
+  rhiscom_backend:
+    build:
+      context: ./rhiscom-ms
+      #dockerfile: Dockerfile
+    container_name: rhiscom_ba
+    restart: always
+    ports:
+      - "8080:8080" # Cambia el puerto si tu backend corre en otro diferente
+    environment:
+      - DB_HOST=rhiscom_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://rhiscom_db:5432/rhiscom_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-rhiscom}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-rhiscom}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - TZ=America/Bogota
+    depends_on:
+      rhiscom_db:
+        condition: service_healthy
+
+  rhiscom_frontend:
+    build:
+      context: ./rhiscom-fr
+      #dockerfile: Dockerfile
+    container_name: rhiscom_fr
+    restart: always
+    ports:
+      - "3000:80"  
+    depends_on:
+      - rhiscom_backend
+
 volumes:
   rhiscom_db:
